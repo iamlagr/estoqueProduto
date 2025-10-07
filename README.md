@@ -1,0 +1,1 @@
+Este projeto é um sistema simples de gerenciamento de estoque com cadastro de produtos, utilizando HTML, CSS e JavaScript.

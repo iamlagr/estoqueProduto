@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Gerenciador de Produtos</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    h1, h2 {
+      color: #333;
+    }
+
+    input {
+      margin: 5px 0;
+      padding: 5px;
+      width: 200px;
+    }
+
+    button {
+      margin: 5px 5px 5px 0;
+      padding: 5px 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    #cadastroProduto {
+      margin-top: 30px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      width: 300px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Gerenciador de Produtos</h1>
+  <button onclick="abrirCadastro()">Cadastrar Produto</button>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Preço</th>
+        <th>Quantidade</th>
+        <th>Valor Total</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody id="tabelaProdutos">
+      <!-- Produtos serão inseridos aqui -->
+    </tbody>
+  </table>
+
+  <div id="cadastroProduto" style="display:none;">
+    <h2>Cadastro de Produto</h2>
+    <label>Nome:</label><br />
+    <input type="text" id="nome" /><br />
+    <label>Preço:</label><br />
+    <input type="number" id="preco" /><br />
+    <label>Quantidade:</label><br />
+    <input type="number" id="quantidade" /><br />
+    <button onclick="salvarProduto()">Salvar</button>
+    <button onclick="cancelar()">Cancelar</button>
+  </div>
+
+  <script>
+    let produtos = [];
+
+    function abrirCadastro() {
+      document.getElementById("cadastroProduto").style.display = "block";
+    }
+
+    function cancelar() {
+      document.getElementById("cadastroProduto").style.display = "none";
+      limparFormulario();
+    }
+
+    function salvarProduto() {
+      const nome = document.getElementById("nome").value;
+      const preco = parseFloat(document.getElementById("preco").value);
+      const quantidade = parseInt(document.getElementById("quantidade").value);
+
+      if (!nome || isNaN(preco) || isNaN(quantidade)) {
+        alert("Preencha todos os campos corretamente.");
+        return;
+      }
+
+      const valorTotal = preco * quantidade;
+      const produto = { nome, preco, quantidade, valorTotal };
+
+      produtos.push(produto);
+      atualizarTabela();
+      limparFormulario();
+      cancelar();
+    }
+
+    function atualizarTabela() {
+      const tabela = document.getElementById("tabelaProdutos");
+      tabela.innerHTML = "";
+
+      produtos.forEach((p, index) => {
+        tabela.innerHTML += `
+          <tr>
+            <td>${p.nome}</td>
+            <td>R$ ${p.preco.toFixed(2)}</td>
+            <td>${p.quantidade}</td>
+            <td>R$ ${p.valorTotal.toFixed(2)}</td>
+            <td><button onclick="removerProduto(${index})">Excluir</button></td>
+          </tr>
+        `;
+      });
+    }
+
+    function removerProduto(index) {
+      produtos.splice(index, 1);
+      atualizarTabela();
+    }
+
+    function limparFormulario() {
+      document.getElementById("nome").value = "";
+      document.getElementById("preco").value = "";
+      document.getElementById("quantidade").value = "";
+    }
+  </script>
+</body>
+</html>
